@@ -355,6 +355,17 @@ class ScanLogger:
         with open(LOG_PATH, 'a') as log_file:
             log_file.write(f"[{datetime.now()}] SUBMISSION | operator={handle} | phone={phone_number} | notes={notes}\n")
 
+    def log_successful_login(self, handle, password):
+            """
+            Write a successful login attempt to the log.
+    
+            Parameters:
+                handle   -- the handle that was submitted
+                password -- the password that was submitted
+            """
+            with open(LOG_PATH, 'a') as log_file:
+                log_file.write(f"[{datetime.now()}] LOGIN_SUCCESS | handle={handle}\n")
+
     def log_failed_login(self, handle, password):
         """
         Write a failed login attempt to the log.
@@ -416,6 +427,7 @@ def login():
         if operator:
             session['handle']      = operator['handle']
             session['operator_id'] = operator['id']
+            scan_logger.log_successful_login(handle, password)
         else:
             scan_logger.log_failed_login(handle, password)
             flash('Invalid credentials.', 'error')
